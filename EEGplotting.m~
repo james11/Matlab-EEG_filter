@@ -1,0 +1,65 @@
+
+% clear all
+clc
+
+
+
+
+subplot(5,2,1)
+plot(EEG_open,'r')
+title('open')
+
+subplot(5,2,2)
+plot(EEG_closed)
+title('close')
+
+filted_open = filter(filt1.tf.num, filt1.tf.den, EEG_open)
+filted_closed = filter(filt1.tf.num, filt1.tf.den, EEG_closed)
+
+subplot(5,2,3)
+plot(filted_open , 'r')
+
+subplot(5,2,4)
+plot(filted_closed)
+
+subplot(5,2,5)
+plot(EEG_closed)
+hold on
+plot(EEG_open,'r')
+
+subplot(5,2,6)
+plot(filted_closed)
+hold on
+plot(filted_open,'r')
+
+
+
+% plot(filt1.tf.num(1,1:9614),'DisplayName','filt1.tf.num(1,1:9614)','YDataSource','filt1.tf.num(1,1:9614)');figure(gcf)
+
+impRes = filt1.tf.num(1,1:9614)
+freqRes = fft(impRes , 102400)
+abs_Res = abs(freqRes)
+
+freq_open = fft(EEG_closed(10000:20000) , 102400)
+freq_close = fft(EEG_closed(10000:20000) , 102400)
+
+abs_open = abs(freq_open)
+abs_close = abs(freq_close)
+
+subplot(5,2,7)
+plot(abs_open(1:1024) ,'r' )
+title('freq-open')
+
+subplot(5,2,8)
+plot(abs_close(1:128))
+title('freq-close')
+
+subplot(5,2,9)
+plot(abs_open(1:128) ,'r' )
+% label('open' )
+hold on
+plot(abs_close(1:1024))
+% title('open')
+hold on
+plot(1600*abs_Res(1:1024) , 'g')
+
